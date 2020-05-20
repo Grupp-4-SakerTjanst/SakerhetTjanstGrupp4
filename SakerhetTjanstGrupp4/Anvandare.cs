@@ -21,6 +21,8 @@ namespace SakerhetTjanstGrupp4
         [StringLength(50)]
         public string Losenord { get; set; }
 
-        public int Behorighet { get; set; }
+        public int Behorighetniva { get; set; }
+
+
     }
 }
