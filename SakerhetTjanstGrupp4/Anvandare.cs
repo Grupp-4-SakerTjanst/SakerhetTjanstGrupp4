@@ -11,7 +11,7 @@ namespace SakerhetTjanstGrupp4
     {
         public int Id { get; set; }
 
-        public int AnvandarId { get; set; }
+       
 
         [Required]
         [StringLength(50)]
@@ -20,5 +20,7 @@ namespace SakerhetTjanstGrupp4
         [Required]
         [StringLength(50)]
         public string Losenord { get; set; }
+
+        public int Behorighet { get; set; }
     }
 }

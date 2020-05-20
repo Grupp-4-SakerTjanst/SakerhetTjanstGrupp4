@@ -13,7 +13,7 @@ namespace SakerhetTjanstGrupp4
         }
 
         public virtual DbSet<Anvandare> Anvandares { get; set; }
-        public virtual DbSet<Personal> Personals { get; set; }
+ 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
