@@ -70,20 +70,20 @@ namespace SakerhetTjanstGrupp4.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Anvandares
-        [ResponseType(typeof(Anvandare))]
-        public IHttpActionResult PostAnvandare(Anvandare anvandare)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //// POST: api/Anvandares
+        //[ResponseType(typeof(Anvandare))]
+        //public IHttpActionResult PostAnvandare(Anvandare anvandare)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            db.Anvandares.Add(anvandare);
-            db.SaveChanges();
+        //    db.Anvandares.Add(anvandare);
+        //    db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = anvandare.Id }, anvandare);
-        }
+        //    return CreatedAtRoute("DefaultApi", new { id = anvandare.Id }, anvandare);
+        //}
 
         // DELETE: api/Anvandares/5
         [ResponseType(typeof(Anvandare))]
@@ -114,5 +114,32 @@ namespace SakerhetTjanstGrupp4.Controllers
         {
             return db.Anvandares.Count(e => e.Id == id) > 0;
         }
+
+
+
+
+        //Vår Kod
+
+        
+        [HttpPost]
+        [Route("SkapaAnvandare/{Email}/{Losenord}")]
+        public IHttpActionResult SkapaAnvandare(Anvandare NyAnvandare)
+        {
+            Anvandare SkapadAnvandare = new Anvandare();
+            SkapadAnvandare.Email = NyAnvandare.Email;
+            SkapadAnvandare.Losenord = NyAnvandare.Losenord;
+            SkapadAnvandare.Behorighetniva = 1;
+
+            db.Anvandares.Add(SkapadAnvandare);
+            db.SaveChanges();
+
+            //kalla på deras tjänst
+
+            return Ok();
+
+        }
     }
+
+
+
 }

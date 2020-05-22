@@ -16,53 +16,37 @@ namespace SakerhetTjanstGrupp4.Controllers
             Anvandare SkapadAnvandare = new Anvandare();
    
             SkapadAnvandare.Email = "minna@test.se";
-            SkapadAnvandare.Losenord = "12345";
+            SkapadAnvandare.Losenord = "123";
             SkapadAnvandare.Id = 1;
             LoginValidation(SkapadAnvandare);
         }
 
-        [Route("SkapaAnvandare")]
-        [HttpPost]
 
-        public object SkapaAnvandare (Anvandare NyAnvandare)
-        {
-            Anvandare SkapadAnvandare = new Anvandare();
-            SkapadAnvandare.Email = NyAnvandare.Email;
-            SkapadAnvandare.Losenord = NyAnvandare.Losenord;
-            SkapadAnvandare.Behorighetniva = 1;
-            
-
-            db.Anvandares.Add(SkapadAnvandare);
-            db.SaveChanges();
-
-            //kalla på deras tjänst
-            return (NyAnvandare.Id);     
-           
-        }
-      
         [HttpPost]
         public object LoginValidation(Anvandare InLogg)
         {
             if (InLogg.Email == null || InLogg.Losenord == null)
             {
                 ModelState.AddModelError("", "Du måste fylla i");
-                return(1);
+
+                return NotFound();
+
             }
 
-            Anvandare test1 = CheckUser(InLogg.Email, InLogg.Losenord);
+            Anvandare AnvInfo = CheckUser(InLogg.Email, InLogg.Losenord);
 
-            if (test1.Email == null)
+            if (AnvInfo.Email == null)
             {
                 
                 ModelState.AddModelError("", "Inloggning ej godkänd");
-                return (1);
+                return NotFound();
             }
             else
             {
                 System.Web.Security.FormsAuthentication.RedirectFromLoginPage(InLogg.Email, false);
             }
             
-            return(1);
+            return NotFound();
 
         }
 
