@@ -11,7 +11,6 @@ namespace SakerhetTjanstGrupp4
     {
         public int Id { get; set; }
 
-       
 
         [Required]
         [StringLength(50)]
