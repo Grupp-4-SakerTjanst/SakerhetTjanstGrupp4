@@ -16,7 +16,7 @@ namespace SakerhetTjanstGrupp4.Controllers
             Anvandare SkapadAnvandare = new Anvandare();
    
             SkapadAnvandare.Email = "minna@test.se";
-            SkapadAnvandare.Losenord = "123";
+            SkapadAnvandare.Losenord = "12345";
             SkapadAnvandare.Id = 1;
             LoginValidation(SkapadAnvandare);
         }
