@@ -20,9 +20,15 @@ namespace SakerhetTjanstGrupp4.Controllers
             SkapadAnvandare.Id = 1;
             LoginValidation(SkapadAnvandare);
         }
+        [System.Web.Http.HttpGet]
+        public string Minna()
+        {
+            
+            return "Hej";
+        }
 
 
-        [HttpPost]
+        [System.Web.Http.HttpGet]
         public object LoginValidation(Anvandare InLogg)
         {
             if (InLogg.Email == null || InLogg.Losenord == null)
