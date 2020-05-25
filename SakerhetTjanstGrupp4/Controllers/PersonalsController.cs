@@ -21,7 +21,7 @@ namespace SakerhetTjanstGrupp4.Controllers
         {
             Personal SkapadAnvandare = new Personal();
 
-            SkapadAnvandare.AnvandarNamn = "GanimBicoli";
+            SkapadAnvandare.AnvandarNamn = "GanimBicoliTEST4";
             SkapadAnvandare.Losenord = "123";
             SkapadAnvandare.BehorighetsNiva = 2;
 
@@ -183,14 +183,15 @@ namespace SakerhetTjanstGrupp4.Controllers
             {
                 db.Personal.Add(SkapadAnvandare);
                 db.SaveChanges();
+                return (db.Personal.Where(x => x.AnvandarNamn == NyPersonal.AnvandarNamn
+                                  && x.Losenord == NyPersonal.Losenord)
+                                  .Select(s => s.Id).ToList());
+               
             }
             //Returnera detta
             //kalla på deras tjänst och skicka ID. Ska vi inte bara retunera? blir detta kallat så skickar detta tillbaka. vi ska inte 
             //skicka detta till ett specifik tjänst, eller??
-            var h = db.Personal.Where(x => x.AnvandarNamn == NyPersonal.AnvandarNamn
-                                  && x.Losenord == NyPersonal.Losenord)
-                                  .Select(s => s.Id).ToList();
-            var gg = 0;
+
             return Ok();
 
         }

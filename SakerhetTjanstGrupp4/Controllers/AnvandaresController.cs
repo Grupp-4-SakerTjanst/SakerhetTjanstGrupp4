@@ -152,19 +152,16 @@ namespace SakerhetTjanstGrupp4.Controllers
             {
                 db.Anvandares.Add(SkapadAnvandare);
                 db.SaveChanges();
+                return Ok(db.Anvandares.Where(x => x.Email == NyAnvandare.Email
+                                 && x.Losenord == NyAnvandare.Losenord)
+                                 .Select(s => s.Id).ToList());
             }
             //Returnera detta
             //kalla på deras tjänst och skicka ID. Ska vi inte bara retunera? blir detta kallat så skickar detta tillbaka. vi ska inte 
             //skicka detta till ett specifik tjänst, eller??
-            var h = db.Anvandares.Where(x => x.Email == NyAnvandare.Email
-                                  && x.Losenord == NyAnvandare.Losenord)
-                                  .Select(s => s.Id).ToList();
-            var g = 5;
 
 
-            return Ok(db.Anvandares.Where(x => x.Email == NyAnvandare.Email
-                                  && x.Losenord == NyAnvandare.Losenord)
-                                  .Select(s => s.Id).ToList());
+            return Ok();
 
         }
     }
