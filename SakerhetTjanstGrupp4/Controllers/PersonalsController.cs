@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using SakerhetTjanstGrupp4.Models;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -151,6 +152,60 @@ namespace SakerhetTjanstGrupp4.Controllers
         //Våra egna metoder
 
 
+
+        public IHttpActionResult Login(string anvadarNamn, string los)
+        {
+            List<Person> test = new List<Person>();
+
+            try
+            {
+                string emailCheck = anvadarNamn.ToString();
+                string losenordCheck = los.ToString();
+            }
+            catch (ArgumentNullException e)
+            {
+
+                throw;
+            }
+            catch (FormatException e)
+            {
+
+                throw;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+
+            try
+            {
+                test = db.Personal.Where(x => x.AnvandarNamn == anvadarNamn)
+                                   .OrderBy(x => x.Id)
+                                   .Select(x => new Person   //Använder egen model.
+                                   {
+                                       BehorighetsNiva = x.BehorighetsNiva,
+                                       Id = x.Id
+                                   }).ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            return Ok(db.Personal.Where(x => x.AnvandarNamn == anvadarNamn)
+                                   .OrderBy(x => x.Id)
+                                   .Select(x => new Person   //Använder egen model.
+                                   {
+                                       BehorighetsNiva = x.BehorighetsNiva,
+                                       Id = x.Id
+                                   }).ToList());
+        }
+
+
         [Route("SkapaPersonal")]
         [HttpPost]
         public object SkapaPersonal(Personal NyPersonal)
@@ -168,6 +223,8 @@ namespace SakerhetTjanstGrupp4.Controllers
                 throw;
             }
 
+            //Göra en lätt check mot XSS / SQL-injecktion.
+            //Göra en gemensam metod mot detta för AnvandaresControll och denna controllern?
            
             bool sammaKonto = false;
             foreach (var item in db.Personal.ToList())

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using SakerhetTjanstGrupp4.Models;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
@@ -16,12 +17,27 @@ namespace SakerhetTjanstGrupp4.Controllers
     {
         private SakerhetDBModell db = new SakerhetDBModell();
 
-
-        // GET: api/Anvandares
-        public IQueryable<Anvandare> GetAnvandares()
+        [HttpGet]
+        public IHttpActionResult Home()
         {
-            return db.Anvandares;
+            Personal SkapadAnvandare = new Personal();
+
+            SkapadAnvandare.AnvandarNamn = "GanimBicoliTEST4";
+            SkapadAnvandare.Losenord = "123";
+            SkapadAnvandare.BehorighetsNiva = 2;
+
+            Login("Ganim@hotmail.com", "123");
+            
+
+            return Ok();
+
+
         }
+        // GET: api/Anvandares
+        //public IQueryable<Anvandare> GetAnvandares()
+        //{
+        //    return db.Anvandares;
+        //}
 
         // GET: api/Anvandares/5
         [ResponseType(typeof(Anvandare))]
@@ -120,8 +136,62 @@ namespace SakerhetTjanstGrupp4.Controllers
 
 
         //Vår Kod
+        public IHttpActionResult Login(string email, string los)
+        {
+            List<Anvandar> test = new List<Anvandar>();
 
-        
+            try
+            {
+                string emailCheck = email.ToString();
+                string losenordCheck = los.ToString();
+            }
+            catch (ArgumentNullException e)
+            {
+
+                throw;
+            }
+            catch (FormatException e)
+            {
+
+                throw;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+
+            try
+            {
+                test = db.Anvandares.Where(x => x.Email == email)
+                                   .OrderBy(x => x.Id)
+                                   .Select(x => new Anvandar   //Använder egen model.
+                                   {
+                                       Behorighetniva = x.Behorighetniva,
+                                       Id = x.Id
+                                   }).ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            return Ok(db.Anvandares.Where(x => x.Email == email)
+                                   .OrderBy(x => x.Id)
+                                   .Select(x => new Anvandar   //Använder egen model.
+                                   {
+                                       Behorighetniva = x.Behorighetniva,
+                                       Id = x.Id
+                                   }).ToList());
+        }
+
+
+
+
+
         [HttpPost]
         [Route("SkapaAnvandare/{Email}/{Losenord}")]
         public IHttpActionResult SkapaNyAnvändare(Anvandare NyAnvandare)
