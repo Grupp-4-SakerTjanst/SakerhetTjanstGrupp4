@@ -9,7 +9,7 @@ namespace SakerhetTjanstGrupp4
     [Table("Personal")]
     public partial class Personal
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+
         public int Id { get; set; }
 
         [Required]

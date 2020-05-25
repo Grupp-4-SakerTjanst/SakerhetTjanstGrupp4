@@ -10,18 +10,8 @@ namespace SakerhetTjanstGrupp4.Controllers
     public class LoggaInController : ApiController
     {
         private SakerhetDBModell db = new SakerhetDBModell();
-        [HttpGet]
-        public void Home()
-        {
-            Anvandare SkapadAnvandare = new Anvandare();
-   
-            SkapadAnvandare.Email = "minna@test.se";
-            SkapadAnvandare.Losenord = "123";
-            SkapadAnvandare.Id = 1;
-            LoginValidation(SkapadAnvandare);
-        }
-
-
+       
+        [Route("LoginValidation")]
         [HttpPost]
         public object LoginValidation(Anvandare InLogg)
         {
@@ -73,22 +63,23 @@ namespace SakerhetTjanstGrupp4.Controllers
      */
 
         }
-       /* public Anvandare BehorighetMetod(int id, int behorighet)
-        {
-            List<Anvandare> BehorigAnvandare = new List<Anvandare>();
-            Anvandare TempDBAnvandare = new Anvandare();
-           
-            foreach (var item in BehorigAnvandare)
-            {
-                var behorig = from rader in db.Anvandares
-                              where rader.Id == TempDBAnvandare.Id
-                              select rader.Behorighet;
-            }
-            
-            return
+        /* public Anvandare BehorighetMetod(int id, int behorighet)
+         {
+             List<Anvandare> BehorigAnvandare = new List<Anvandare>();
+             Anvandare TempDBAnvandare = new Anvandare();
 
-        }*/
+             foreach (var item in BehorigAnvandare)
+             {
+                 var behorig = from rader in db.Anvandares
+                               where rader.Id == TempDBAnvandare.Id
+                               select rader.Behorighet;
+             }
 
-       
+             return
+
+         }*/
+
+    
+
     }
 }

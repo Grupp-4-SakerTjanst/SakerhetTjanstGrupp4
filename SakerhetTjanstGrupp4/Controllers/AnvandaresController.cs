@@ -16,6 +16,7 @@ namespace SakerhetTjanstGrupp4.Controllers
     {
         private SakerhetDBModell db = new SakerhetDBModell();
 
+
         // GET: api/Anvandares
         public IQueryable<Anvandare> GetAnvandares()
         {
@@ -123,19 +124,47 @@ namespace SakerhetTjanstGrupp4.Controllers
         
         [HttpPost]
         [Route("SkapaAnvandare/{Email}/{Losenord}")]
-        public IHttpActionResult SkapaAnvandare(Anvandare NyAnvandare)
+        public IHttpActionResult SkapaNyAnvändare(Anvandare NyAnvandare)
         {
             Anvandare SkapadAnvandare = new Anvandare();
-            SkapadAnvandare.Email = NyAnvandare.Email;
-            SkapadAnvandare.Losenord = NyAnvandare.Losenord;
-            SkapadAnvandare.Behorighetniva = 1;
+            bool sammaKonto = false;
+            foreach (var item in db.Anvandares.ToList())
+            {
+                if (item.Email == NyAnvandare.Email)
+                {
+                    sammaKonto = true;
+                    break;
+                }
+            }
 
-            db.Anvandares.Add(SkapadAnvandare);
-            db.SaveChanges();
+            try
+            {
+                SkapadAnvandare.Email = NyAnvandare.Email;
+                SkapadAnvandare.Losenord = NyAnvandare.Losenord;
+                SkapadAnvandare.Behorighetniva = 1;
+            }
+            catch (NullReferenceException)
+            {
+                //retunera att ett av värderna var null.
+                throw;
+            }
+            if (sammaKonto == false)
+            {
+                db.Anvandares.Add(SkapadAnvandare);
+                db.SaveChanges();
+            }
+            //Returnera detta
+            //kalla på deras tjänst och skicka ID. Ska vi inte bara retunera? blir detta kallat så skickar detta tillbaka. vi ska inte 
+            //skicka detta till ett specifik tjänst, eller??
+            var h = db.Anvandares.Where(x => x.Email == NyAnvandare.Email
+                                  && x.Losenord == NyAnvandare.Losenord)
+                                  .Select(s => s.Id).ToList();
+            var g = 5;
 
-            //kalla på deras tjänst
 
-            return Ok();
+            return Ok(db.Anvandares.Where(x => x.Email == NyAnvandare.Email
+                                  && x.Losenord == NyAnvandare.Losenord)
+                                  .Select(s => s.Id).ToList());
 
         }
     }
