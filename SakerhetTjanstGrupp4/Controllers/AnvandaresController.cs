@@ -15,7 +15,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 {
     public class AnvandaresController : ApiController
     {
-        private SakerhetDBModell db = new SakerhetDBModell();
+        private AnvandarModel db = new AnvandarModel();
 
         [HttpGet]
         public IHttpActionResult Home()
@@ -43,7 +43,7 @@ namespace SakerhetTjanstGrupp4.Controllers
         [ResponseType(typeof(Anvandare))]
         public IHttpActionResult GetAnvandare(int id)
         {
-            Anvandare anvandare = db.Anvandares.Find(id);
+            Anvandare anvandare = db.Anvandare.Find(id);
             if (anvandare == null)
             {
                 return NotFound();
@@ -106,13 +106,13 @@ namespace SakerhetTjanstGrupp4.Controllers
         [ResponseType(typeof(Anvandare))]
         public IHttpActionResult DeleteAnvandare(int id)
         {
-            Anvandare anvandare = db.Anvandares.Find(id);
+            Anvandare anvandare = db.Anvandare.Find(id);
             if (anvandare == null)
             {
                 return NotFound();
             }
 
-            db.Anvandares.Remove(anvandare);
+            db.Anvandare.Remove(anvandare);
             db.SaveChanges();
 
             return Ok(anvandare);
@@ -129,7 +129,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         private bool AnvandareExists(int id)
         {
-            return db.Anvandares.Count(e => e.Id == id) > 0;
+            return db.Anvandare.Count(e => e.Id == id) > 0;
         }
 
 
@@ -164,7 +164,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
             try
             {
-                test = db.Anvandares.Where(x => x.Email == email)
+                test = db.Anvandare.Where(x => x.Email == email)
                                    .OrderBy(x => x.Id)
                                    .Select(x => new Anvandar   //Använder egen model.
                                    {
@@ -179,7 +179,7 @@ namespace SakerhetTjanstGrupp4.Controllers
             }
 
 
-            return Ok(db.Anvandares.Where(x => x.Email == email)
+            return Ok(db.Anvandare.Where(x => x.Email == email)
                                    .OrderBy(x => x.Id)
                                    .Select(x => new Anvandar   //Använder egen model.
                                    {
@@ -198,7 +198,7 @@ namespace SakerhetTjanstGrupp4.Controllers
         {
             Anvandare SkapadAnvandare = new Anvandare();
             bool sammaKonto = false;
-            foreach (var item in db.Anvandares.ToList())
+            foreach (var item in db.Anvandare.ToList())
             {
                 if (item.Email == NyAnvandare.Email)
                 {
@@ -220,9 +220,9 @@ namespace SakerhetTjanstGrupp4.Controllers
             }
             if (sammaKonto == false)
             {
-                db.Anvandares.Add(SkapadAnvandare);
+                db.Anvandare.Add(SkapadAnvandare);
                 db.SaveChanges();
-                return Ok(db.Anvandares.Where(x => x.Email == NyAnvandare.Email
+                return Ok(db.Anvandare.Where(x => x.Email == NyAnvandare.Email
                                  && x.Losenord == NyAnvandare.Losenord)
                                  .Select(s => s.Id).ToList());
             }

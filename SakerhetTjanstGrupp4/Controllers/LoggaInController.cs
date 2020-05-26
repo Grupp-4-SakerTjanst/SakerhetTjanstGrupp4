@@ -9,7 +9,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 {
     public class LoggaInController : ApiController
     {
-        private SakerhetDBModell db = new SakerhetDBModell();
+        private AnvandarModel db = new AnvandarModel();
        
         [Route("LoginValidation")]
         [HttpPost]
@@ -42,7 +42,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         private Anvandare CheckUser(string email, string losord)
         {
-            var tempDB = db.Anvandares.ToList();
+            var tempDB = db.Anvandare.ToList();
             foreach (var item in tempDB)
             {
                 Anvandare TempDBAnvandare = new Anvandare();

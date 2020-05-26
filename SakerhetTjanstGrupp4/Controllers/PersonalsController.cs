@@ -26,8 +26,6 @@ namespace SakerhetTjanstGrupp4.Controllers
             SkapadAnvandare.Losenord = "123";
             SkapadAnvandare.BehorighetsNiva = 2;
 
-            SkapaPersonal(SkapadAnvandare);
-
             return Ok();
 
 
@@ -88,34 +86,34 @@ namespace SakerhetTjanstGrupp4.Controllers
         }
 
         // POST: api/Personals
-        [ResponseType(typeof(Personal))]
-        public IHttpActionResult PostPersonal(Personal personal)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[ResponseType(typeof(Personal))]
+        //public IHttpActionResult PostPersonal(Personal personal)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            db.Personal.Add(personal);
+        //    db.Personal.Add(personal);
 
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateException)
-            {
-                if (PersonalExists(personal.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        db.SaveChanges();
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        if (PersonalExists(personal.Id))
+        //        {
+        //            return Conflict();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return CreatedAtRoute("DefaultApi", new { id = personal.Id }, personal);
-        }
+        //    return CreatedAtRoute("DefaultApi", new { id = personal.Id }, personal);
+        //}
 
         // DELETE: api/Personals/5
         [ResponseType(typeof(Personal))]
@@ -152,15 +150,16 @@ namespace SakerhetTjanstGrupp4.Controllers
         //Våra egna metoder
 
 
-
-        public IHttpActionResult Login(string anvadarNamn, string los)
+        [Route("Login")]
+        [HttpPost]
+        public IHttpActionResult Login(Personal anvadar)
         {
             List<Person> test = new List<Person>();
 
             try
             {
-                string emailCheck = anvadarNamn.ToString();
-                string losenordCheck = los.ToString();
+                string emailCheck = anvadar.AnvandarNamn.ToString();
+                string losenordCheck = anvadar.Losenord.ToString();
             }
             catch (ArgumentNullException e)
             {
@@ -181,7 +180,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
             try
             {
-                test = db.Personal.Where(x => x.AnvandarNamn == anvadarNamn)
+                test = db.Personal.Where(x => x.AnvandarNamn == anvadar.AnvandarNamn)
                                    .OrderBy(x => x.Id)
                                    .Select(x => new Person   //Använder egen model.
                                    {
@@ -196,7 +195,7 @@ namespace SakerhetTjanstGrupp4.Controllers
             }
 
 
-            return Ok(db.Personal.Where(x => x.AnvandarNamn == anvadarNamn)
+            return Ok(db.Personal.Where(x => x.AnvandarNamn == anvadar.AnvandarNamn)
                                    .OrderBy(x => x.Id)
                                    .Select(x => new Person   //Använder egen model.
                                    {

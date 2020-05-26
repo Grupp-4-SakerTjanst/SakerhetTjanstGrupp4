@@ -11,7 +11,6 @@ namespace SakerhetTjanstGrupp4
     {
         public int Id { get; set; }
 
-
         [Required]
         [StringLength(50)]
         public string Email { get; set; }
@@ -21,7 +20,5 @@ namespace SakerhetTjanstGrupp4
         public string Losenord { get; set; }
 
         public int Behorighetniva { get; set; }
-
-
     }
 }
