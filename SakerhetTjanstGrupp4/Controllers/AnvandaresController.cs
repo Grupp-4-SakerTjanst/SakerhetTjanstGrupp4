@@ -136,9 +136,11 @@ namespace SakerhetTjanstGrupp4.Controllers
 
 
         //Vår Kod
+        [Route("Login")]
         public IHttpActionResult Login(string email, string los)
         {
-            List<Anvandar> test = new List<Anvandar>();
+            //List<Anvandar> test = new List<Anvandar>();
+            Anvandare test = new Anvandare();
 
             try
             {
@@ -160,32 +162,21 @@ namespace SakerhetTjanstGrupp4.Controllers
 
                 throw;
             }
-
-
             try
             {
-                test = db.Anvandare.Where(x => x.Email == email)
-                                   .OrderBy(x => x.Id)
-                                   .Select(x => new Anvandar   //Använder egen model.
-                                   {
-                                       Behorighetniva = x.Behorighetniva,
-                                       Id = x.Id
-                                   }).ToList();
+                test = db.Anvandare.Where(x => x.Email == email && x.Losenord == los).FirstOrDefault();
+                                   //.OrderBy(x => x.Id)
+                                   //.Select(x => new Anvandar   //Använder egen model.
+                                   //{
+                                   //    Behorighetniva = x.Behorighetniva,
+                                   //    Id = x.Id
+                                   //}).FirstOrDefault();
             }
             catch (Exception)
             {
-
                 throw;
             }
-
-
-            return Ok(db.Anvandare.Where(x => x.Email == email)
-                                   .OrderBy(x => x.Id)
-                                   .Select(x => new Anvandar   //Använder egen model.
-                                   {
-                                       Behorighetniva = x.Behorighetniva,
-                                       Id = x.Id
-                                   }).ToList());
+            return Ok(test);
         }
 
 
@@ -193,7 +184,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
 
         [HttpPost]
-        [Route("SkapaAnvandare/{Email}/{Losenord}")]
+        [Route("SkapaAnvandare")]
         public IHttpActionResult SkapaNyAnvändare(Anvandare NyAnvandare)
         {
             Anvandare SkapadAnvandare = new Anvandare();
@@ -222,9 +213,12 @@ namespace SakerhetTjanstGrupp4.Controllers
             {
                 db.Anvandare.Add(SkapadAnvandare);
                 db.SaveChanges();
-                return Ok(db.Anvandare.Where(x => x.Email == NyAnvandare.Email
-                                 && x.Losenord == NyAnvandare.Losenord)
-                                 .Select(s => s.Id).ToList());
+                return Ok(SkapadAnvandare.Id);
+
+                //return Ok(db.Anvandare.Where(x => x.Email == NyAnvandare.Email
+                //                 && x.Losenord == NyAnvandare.Losenord)
+                //                 .Select(s => s.Id).FirstOrDefault());
+
             }
             //Returnera detta
             //kalla på deras tjänst och skicka ID. Ska vi inte bara retunera? blir detta kallat så skickar detta tillbaka. vi ska inte 

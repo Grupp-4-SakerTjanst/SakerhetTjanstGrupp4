@@ -214,7 +214,6 @@ namespace SakerhetTjanstGrupp4.Controllers
             {
                 SkapadAnvandare.AnvandarNamn = NyPersonal.AnvandarNamn;
                 SkapadAnvandare.Losenord = NyPersonal.Losenord;
-                SkapadAnvandare.BehorighetsNiva = 2;
             }
             catch (NullReferenceException)
             {
@@ -224,7 +223,8 @@ namespace SakerhetTjanstGrupp4.Controllers
 
             //Göra en lätt check mot XSS / SQL-injecktion.
             //Göra en gemensam metod mot detta för AnvandaresControll och denna controllern?
-           
+
+            var h = db.Personal.ToList();
             bool sammaKonto = false;
             foreach (var item in db.Personal.ToList())
             {
@@ -241,7 +241,7 @@ namespace SakerhetTjanstGrupp4.Controllers
                 db.SaveChanges();
                 return (db.Personal.Where(x => x.AnvandarNamn == NyPersonal.AnvandarNamn
                                   && x.Losenord == NyPersonal.Losenord)
-                                  .Select(s => s.Id).ToList());
+                                  .Select(s => s.Id).FirstOrDefault());
                
             }
             //Returnera detta
