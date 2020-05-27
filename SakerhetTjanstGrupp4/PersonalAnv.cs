@@ -6,20 +6,19 @@ namespace SakerhetTjanstGrupp4
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Personal")]
-    public partial class Personal
+    [Table("PersonalAnv")]
+    public partial class PersonalAnv
     {
-
         public int Id { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string AnvandarNamn { get; set; }
+        public string Anvandarnamn { get; set; }
 
         [Required]
         [StringLength(50)]
         public string Losenord { get; set; }
 
-        public int BehorighetsNiva { get; set; }
+        public int Behorighetsniva { get; set; }
     }
 }

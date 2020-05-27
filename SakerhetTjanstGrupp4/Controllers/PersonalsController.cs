@@ -20,7 +20,7 @@ namespace SakerhetTjanstGrupp4.Controllers
         [HttpGet]
         public IHttpActionResult Home()
         {
-            Personal SkapadAnvandare = new Personal();
+            PersonalAnv SkapadAnvandare = new PersonalAnv();
 
             SkapadAnvandare.AnvandarNamn = "GanimBicoliTEST4";
             SkapadAnvandare.Losenord = "123";
@@ -38,10 +38,10 @@ namespace SakerhetTjanstGrupp4.Controllers
         //}
 
         // GET: api/Personals/5
-        [ResponseType(typeof(Personal))]
+        [ResponseType(typeof(PersonalAnv))]
         public IHttpActionResult GetPersonal(int id)
         {
-            Personal personal = db.Personal.Find(id);
+            PersonalAnv personal = db.PersonalAnvs.Find(id);
             if (personal == null)
             {
                 return NotFound();
@@ -51,60 +51,30 @@ namespace SakerhetTjanstGrupp4.Controllers
         }
 
         // PUT: api/Personals/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutPersonal(int id, Personal personal)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != personal.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(personal).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PersonalExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Personals
-        //[ResponseType(typeof(Personal))]
-        //public IHttpActionResult PostPersonal(Personal personal)
+        //[ResponseType(typeof(void))]
+        //public IHttpActionResult PutPersonal(int id, Personal personal)
         //{
         //    if (!ModelState.IsValid)
         //    {
         //        return BadRequest(ModelState);
         //    }
 
-        //    db.Personal.Add(personal);
+        //    if (id != personal.Id)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    db.Entry(personal).State = EntityState.Modified;
 
         //    try
         //    {
         //        db.SaveChanges();
         //    }
-        //    catch (DbUpdateException)
+        //    catch (DbUpdateConcurrencyException)
         //    {
-        //        if (PersonalExists(personal.Id))
+        //        if (!PersonalExists(id))
         //        {
-        //            return Conflict();
+        //            return NotFound();
         //        }
         //        else
         //        {
@@ -112,20 +82,52 @@ namespace SakerhetTjanstGrupp4.Controllers
         //        }
         //    }
 
-        //    return CreatedAtRoute("DefaultApi", new { id = personal.Id }, personal);
+        //    return StatusCode(HttpStatusCode.NoContent);
         //}
 
+        //POST: api/Personals
+        [Route("CreatePersonal")]
+        [HttpPost]
+        //[ResponseType(typeof(Personal))]
+        public IHttpActionResult PostPersonal(PersonalAnv personal)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.PersonalAnvs.Add(personal);
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                if (PersonalExists(personal.Id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = personal.Id }, personal);
+        }
+
         // DELETE: api/Personals/5
-        [ResponseType(typeof(Personal))]
+        [ResponseType(typeof(PersonalAnv))]
         public IHttpActionResult DeletePersonal(int id)
         {
-            Personal personal = db.Personal.Find(id);
+            PersonalAnv personal = db.PersonalAnvs.Find(id);
             if (personal == null)
             {
                 return NotFound();
             }
 
-            db.Personal.Remove(personal);
+            db.PersonalAnvs.Remove(personal);
             db.SaveChanges();
 
             return Ok(personal);
@@ -142,7 +144,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         private bool PersonalExists(int id)
         {
-            return db.Personal.Count(e => e.Id == id) > 0;
+            return db.PersonalAnvs.Count(e => e.Id == id) > 0;
         }
 
 
@@ -152,7 +154,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         [Route("Login")]
         [HttpPost]
-        public IHttpActionResult Login(Personal anvadar)
+        public IHttpActionResult Login(PersonalAnv anvadar)
         {
             List<Person> test = new List<Person>();
 
@@ -180,7 +182,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
             try
             {
-                test = db.Personal.Where(x => x.AnvandarNamn == anvadar.AnvandarNamn)
+                test = db.PersonalAnvs.Where(x => x.AnvandarNamn == anvadar.AnvandarNamn)
                                    .OrderBy(x => x.Id)
                                    .Select(x => new Person   //Använder egen model.
                                    {
@@ -195,7 +197,7 @@ namespace SakerhetTjanstGrupp4.Controllers
             }
 
 
-            return Ok(db.Personal.Where(x => x.AnvandarNamn == anvadar.AnvandarNamn)
+            return Ok(db.PersonalAnvs.Where(x => x.AnvandarNamn == anvadar.AnvandarNamn)
                                    .OrderBy(x => x.Id)
                                    .Select(x => new Person   //Använder egen model.
                                    {
@@ -207,9 +209,9 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         [Route("SkapaPersonal")]
         [HttpPost]
-        public object SkapaPersonal(Personal NyPersonal)
+        public object SkapaPersonal(PersonalAnv NyPersonal)
         {
-            Personal SkapadAnvandare = new Personal();
+            PersonalAnv SkapadAnvandare = new PersonalAnv();
             try
             {
                 SkapadAnvandare.AnvandarNamn = NyPersonal.AnvandarNamn;
@@ -226,7 +228,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
             var h = db.Personal.ToList();
             bool sammaKonto = false;
-            foreach (var item in db.Personal.ToList())
+            foreach (var item in db.PersonalAnvs.ToList())
             {
                 if (item.AnvandarNamn == NyPersonal.AnvandarNamn)
                 {
@@ -237,9 +239,9 @@ namespace SakerhetTjanstGrupp4.Controllers
             
             if (sammaKonto == false)
             {
-                db.Personal.Add(SkapadAnvandare);
+                db.PersonalAnvs.Add(SkapadAnvandare);
                 db.SaveChanges();
-                return (db.Personal.Where(x => x.AnvandarNamn == NyPersonal.AnvandarNamn
+                return (db.PersonalAnvs.Where(x => x.AnvandarNamn == NyPersonal.AnvandarNamn
                                   && x.Losenord == NyPersonal.Losenord)
                                   .Select(s => s.Id).FirstOrDefault());
                
