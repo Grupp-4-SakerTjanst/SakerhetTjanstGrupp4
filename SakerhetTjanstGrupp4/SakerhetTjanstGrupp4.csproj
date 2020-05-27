@@ -172,7 +172,7 @@
     </Compile>
     <Compile Include="Models\Anvandar.cs" />
     <Compile Include="Models\Person.cs" />
-    <Compile Include="Personal.cs" />
+    <Compile Include="PersonalAnv.cs" />
     <Compile Include="PersonalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

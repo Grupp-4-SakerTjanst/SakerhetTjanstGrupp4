@@ -8,21 +8,14 @@ namespace SakerhetTjanstGrupp4
     public partial class PersonalModel : DbContext
     {
         public PersonalModel()
-            : base("name=PersonalModel")
+            : base("name=PersonalModel1")
         {
         }
 
-        public virtual DbSet<Personal> Personal { get; set; }
+        public virtual DbSet<PersonalAnv> PersonalAnvs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Personal>()
-                .Property(e => e.AnvandarNamn)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Personal>()
-                .Property(e => e.Losenord)
-                .IsUnicode(false);
         }
     }
 }
