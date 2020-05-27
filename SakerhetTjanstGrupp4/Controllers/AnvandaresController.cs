@@ -20,13 +20,7 @@ namespace SakerhetTjanstGrupp4.Controllers
         [HttpGet]
         public IHttpActionResult Home()
         {
-            Personal SkapadAnvandare = new Personal();
 
-            SkapadAnvandare.AnvandarNamn = "GanimBicoliTEST4";
-            SkapadAnvandare.Losenord = "123";
-            SkapadAnvandare.BehorighetsNiva = 2;
-
-            Login("Ganim@hotmail.com", "123");
             
 
             return Ok();
@@ -136,16 +130,17 @@ namespace SakerhetTjanstGrupp4.Controllers
 
 
         //Vår Kod
-        [Route("Login")]
-        public IHttpActionResult Login(string email, string los)
+        [HttpPost]
+        [Route("LoggaIn")]
+        public IHttpActionResult Login(Anvandare AnvInfo)
         {
-            //List<Anvandar> test = new List<Anvandar>();
-            Anvandare test = new Anvandare();
+
+             Anvandare Anv = new Anvandare();
 
             try
             {
-                string emailCheck = email.ToString();
-                string losenordCheck = los.ToString();
+                string emailCheck = AnvInfo.Email.ToString();
+                string losenordCheck = AnvInfo.Losenord.ToString();
             }
             catch (ArgumentNullException e)
             {
@@ -164,19 +159,24 @@ namespace SakerhetTjanstGrupp4.Controllers
             }
             try
             {
-                test = db.Anvandare.Where(x => x.Email == email && x.Losenord == los).FirstOrDefault();
-                                   //.OrderBy(x => x.Id)
-                                   //.Select(x => new Anvandar   //Använder egen model.
-                                   //{
-                                   //    Behorighetniva = x.Behorighetniva,
-                                   //    Id = x.Id
-                                   //}).FirstOrDefault();
+
+        
+                Anv = db.Anvandare.Where(x => x.Email == AnvInfo.Email && x.Losenord == AnvInfo.Losenord).FirstOrDefault();
+                //.Select(x => new Anvandar   //Använder egen model.
+                // {
+                //     Behorighetniva = x.Behorighetniva,
+                //     Id = x.Id
+                // }).ToList();
+
+
             }
             catch (Exception)
             {
                 throw;
             }
-            return Ok(test);
+
+            var g = Anv;
+            return Ok(Anv);  //Objekt skickar med AnvNamn och Los. Ska vi göra så att dem blir null. Alt, vi skickar id och behor som parameter.
         }
 
 

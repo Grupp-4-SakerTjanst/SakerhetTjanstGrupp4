@@ -20,11 +20,6 @@ namespace SakerhetTjanstGrupp4.Controllers
         [HttpGet]
         public IHttpActionResult Home()
         {
-            PersonalAnv SkapadAnvandare = new PersonalAnv();
-
-            SkapadAnvandare.AnvandarNamn = "GanimBicoliTEST4";
-            SkapadAnvandare.Losenord = "123";
-            SkapadAnvandare.BehorighetsNiva = 2;
 
             return Ok();
 
@@ -154,14 +149,14 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         [Route("Login")]
         [HttpPost]
-        public IHttpActionResult Login(PersonalAnv anvadar)
+        public IHttpActionResult Login(PersonalAnv persAnv)
         {
-            List<Person> test = new List<Person>();
+            PersonalAnv PersInf = new PersonalAnv();
 
             try
             {
-                string emailCheck = anvadar.AnvandarNamn.ToString();
-                string losenordCheck = anvadar.Losenord.ToString();
+                string emailCheck = persAnv.Anvandarnamn.ToString();
+                string losenordCheck = persAnv.Losenord.ToString();
             }
             catch (ArgumentNullException e)
             {
@@ -182,13 +177,13 @@ namespace SakerhetTjanstGrupp4.Controllers
 
             try
             {
-                test = db.PersonalAnvs.Where(x => x.AnvandarNamn == anvadar.AnvandarNamn)
-                                   .OrderBy(x => x.Id)
-                                   .Select(x => new Person   //Använder egen model.
-                                   {
-                                       BehorighetsNiva = x.BehorighetsNiva,
-                                       Id = x.Id
-                                   }).ToList();
+                PersInf = db.PersonalAnvs.Where(x => x.Anvandarnamn == persAnv.Anvandarnamn && x.Losenord == persAnv.Losenord).FirstOrDefault();
+                //.OrderBy(x => x.Id)
+                //.Select(x => new Person   //Använder egen model.
+                //{
+                //    BehorighetsNiva = x.Behorighetsniva,
+                //    Id = x.Id
+                //}).ToList();
             }
             catch (Exception)
             {
@@ -197,13 +192,7 @@ namespace SakerhetTjanstGrupp4.Controllers
             }
 
 
-            return Ok(db.PersonalAnvs.Where(x => x.AnvandarNamn == anvadar.AnvandarNamn)
-                                   .OrderBy(x => x.Id)
-                                   .Select(x => new Person   //Använder egen model.
-                                   {
-                                       BehorighetsNiva = x.BehorighetsNiva,
-                                       Id = x.Id
-                                   }).ToList());
+            return Ok(PersInf);
         }
 
 
@@ -214,7 +203,7 @@ namespace SakerhetTjanstGrupp4.Controllers
             PersonalAnv SkapadAnvandare = new PersonalAnv();
             try
             {
-                SkapadAnvandare.AnvandarNamn = NyPersonal.AnvandarNamn;
+                SkapadAnvandare.Anvandarnamn = NyPersonal.Anvandarnamn;
                 SkapadAnvandare.Losenord = NyPersonal.Losenord;
             }
             catch (NullReferenceException)
@@ -226,11 +215,11 @@ namespace SakerhetTjanstGrupp4.Controllers
             //Göra en lätt check mot XSS / SQL-injecktion.
             //Göra en gemensam metod mot detta för AnvandaresControll och denna controllern?
 
-            var h = db.Personal.ToList();
+            var h = db.PersonalAnvs.ToList();
             bool sammaKonto = false;
             foreach (var item in db.PersonalAnvs.ToList())
             {
-                if (item.AnvandarNamn == NyPersonal.AnvandarNamn)
+                if (item.Anvandarnamn == NyPersonal.Anvandarnamn)
                 {
                     sammaKonto = true;
                     break;
@@ -241,7 +230,26 @@ namespace SakerhetTjanstGrupp4.Controllers
             {
                 db.PersonalAnvs.Add(SkapadAnvandare);
                 db.SaveChanges();
-                return (db.PersonalAnvs.Where(x => x.AnvandarNamn == NyPersonal.AnvandarNamn
+
+                NyPersonal.Id = SkapadAnvandare.Id;
+
+                using (var client = new HttpClient()) //TODO skicka hela objektet till Personal och spara informationen i listan.
+                {
+                    client.BaseAddress = new Uri("http://localhost:56539/");
+                    var response = client.PostAsJsonAsync("SkapaPersonal", NyPersonal).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var AnvSvar = response.Content.ReadAsStringAsync().Result;
+
+                       Console.Write("Success");
+
+                    }
+                    else
+                        Console.Write("Error");
+                }
+
+                return (db.PersonalAnvs.Where(x => x.Anvandarnamn == NyPersonal.Anvandarnamn
                                   && x.Losenord == NyPersonal.Losenord)
                                   .Select(s => s.Id).FirstOrDefault());
                
