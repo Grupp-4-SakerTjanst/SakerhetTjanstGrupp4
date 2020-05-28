@@ -18,20 +18,20 @@ namespace SakerhetTjanstGrupp4.Controllers
         private AnvandarModel db = new AnvandarModel();
 
         [HttpGet]
-        public IHttpActionResult Home()
-        {
+        //public IHttpActionResult Home()
+        //{
 
             
 
-            return Ok();
+        //    return Ok();
 
 
-        }
-        // GET: api/Anvandares
-        //public IQueryable<Anvandare> GetAnvandares()
-        //{
-        //    return db.Anvandares;
         //}
+        // GET: api/Anvandares
+        public IQueryable<Anvandare> GetAnvandares()
+        {
+            return db.Anvandare;
+        }
 
         // GET: api/Anvandares/5
         [ResponseType(typeof(Anvandare))]
@@ -176,7 +176,7 @@ namespace SakerhetTjanstGrupp4.Controllers
             }
 
             var g = Anv;
-            return Ok(Anv);  //Objekt skickar med AnvNamn och Los. Ska vi göra så att dem blir null. Alt, vi skickar id och behor som parameter.
+            return Ok(Anv.Id);  //Objekt skickar med AnvNamn och Los. Ska vi göra så att dem blir null. Alt, vi skickar id och behor som parameter.
         }
 
 

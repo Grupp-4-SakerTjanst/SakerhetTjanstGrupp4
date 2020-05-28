@@ -18,19 +18,19 @@ namespace SakerhetTjanstGrupp4.Controllers
         private PersonalModel db = new PersonalModel();
 
         [HttpGet]
-        public IHttpActionResult Home()
-        {
+        //public IHttpActionResult Home()
+        //{
 
-            return Ok();
+        //    return Ok();
 
 
-        }
+        //}
 
         // GET: api/Personals
-        //public IQueryable<Personal> GetPersonal()
-        //{
-        //    return db.Personal;
-        //}
+        public IQueryable<PersonalAnv> GetPersonal()
+        {
+            return db.PersonalAnvs;
+        }
 
         // GET: api/Personals/5
         [ResponseType(typeof(PersonalAnv))]
