@@ -149,7 +149,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         [Route("Login")]
         [HttpPost]
-        public IHttpActionResult Login(PersonalAnv persAnv)
+        public IHttpActionResult LoginAdmin(PersonalAnv persAnv)
         {
             PersonalAnv PersInf = new PersonalAnv();
 
