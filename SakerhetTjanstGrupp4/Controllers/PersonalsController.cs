@@ -198,13 +198,14 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         [Route("SkapaPersonal")]
         [HttpPost]
-        public object SkapaPersonal(PersonalAnv NyPersonal)
+        public object SkapaPersonal(Person NyPersonal)
         {
             PersonalAnv SkapadAnvandare = new PersonalAnv();
             try
             {
-                SkapadAnvandare.Anvandarnamn = NyPersonal.Anvandarnamn;
+                SkapadAnvandare.Anvandarnamn = NyPersonal.AnvandarNamn;   //Lägger i objekt av DBmodell.
                 SkapadAnvandare.Losenord = NyPersonal.Losenord;
+                SkapadAnvandare.Behorighetsniva = NyPersonal.BehorighetsNiva;
             }
             catch (NullReferenceException)
             {
@@ -219,7 +220,7 @@ namespace SakerhetTjanstGrupp4.Controllers
             bool sammaKonto = false;
             foreach (var item in db.PersonalAnvs.ToList())
             {
-                if (item.Anvandarnamn == NyPersonal.Anvandarnamn)
+                if (item.Anvandarnamn == NyPersonal.AnvandarNamn)
                 {
                     sammaKonto = true;
                     break;
@@ -232,6 +233,10 @@ namespace SakerhetTjanstGrupp4.Controllers
                 db.SaveChanges();
 
                 NyPersonal.Id = SkapadAnvandare.Id;
+
+                var gan = NyPersonal;
+
+                var heh = 0;
 
                 using (var client = new HttpClient()) //TODO skicka hela objektet till Personal och spara informationen i listan.
                 {
@@ -249,9 +254,7 @@ namespace SakerhetTjanstGrupp4.Controllers
                         Console.Write("Error");
                 }
 
-                return (db.PersonalAnvs.Where(x => x.Anvandarnamn == NyPersonal.Anvandarnamn
-                                  && x.Losenord == NyPersonal.Losenord)
-                                  .Select(s => s.Id).FirstOrDefault());
+                return Ok();
                
             }
             //Returnera detta
