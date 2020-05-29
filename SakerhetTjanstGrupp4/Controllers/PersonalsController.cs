@@ -15,7 +15,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 {
     public class PersonalsController : ApiController
     {
-        private PersonalModel db = new PersonalModel();
+        private SakerhetsDB db = new SakerhetsDB();
 
         [HttpGet]
         //public IHttpActionResult Home()
