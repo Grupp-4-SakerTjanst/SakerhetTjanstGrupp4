@@ -18,22 +18,13 @@ namespace SakerhetTjanstGrupp4.Controllers
         private AnvandarModel db = new AnvandarModel();
 
         [HttpGet]
-        public IHttpActionResult Home()
+        
+        public IQueryable<Anvandare> GetAnvandares()
         {
-
-            
-
-            return Ok();
-
-
+            return db.Anvandare;
         }
-        // GET: api/Anvandares
-        //public IQueryable<Anvandare> GetAnvandares()
-        //{
-        //    return db.Anvandares;
-        //}
 
-        // GET: api/Anvandares/5
+        //GET: api/Anvandares/5
         [ResponseType(typeof(Anvandare))]
         public IHttpActionResult GetAnvandare(int id)
         {
@@ -134,9 +125,7 @@ namespace SakerhetTjanstGrupp4.Controllers
         [Route("LoggaIn")]
         public IHttpActionResult Login(Anvandare AnvInfo)
         {
-
              Anvandare Anv = new Anvandare();
-
             try
             {
                 string emailCheck = AnvInfo.Email.ToString();
@@ -175,7 +164,6 @@ namespace SakerhetTjanstGrupp4.Controllers
                 throw;
             }
 
-            var g = Anv;
             return Ok(Anv);  //Objekt skickar med AnvNamn och Los. Ska vi göra så att dem blir null. Alt, vi skickar id och behor som parameter.
         }
 

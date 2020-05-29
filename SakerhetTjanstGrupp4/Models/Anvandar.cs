@@ -14,8 +14,5 @@ namespace SakerhetTjanstGrupp4.Models
         public string Losenord { get; set; }
 
         public int Behorighetniva { get; set; }
-
-
-    
     }
 }
