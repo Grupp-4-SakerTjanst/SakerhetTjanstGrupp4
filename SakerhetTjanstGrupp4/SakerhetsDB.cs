@@ -5,14 +5,15 @@ namespace SakerhetTjanstGrupp4
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    public partial class AnvandarModel : DbContext
+    public partial class SakerhetsDB : DbContext
     {
-        public AnvandarModel()
-            : base("name=AnvandarModel")
+        public SakerhetsDB()
+            : base("name=SakerhetsDB")
         {
         }
 
-        public virtual DbSet<Anvandare> Anvandare { get; set; }
+        public virtual DbSet<Anvandare> Anvandares { get; set; }
+        public virtual DbSet<PersonalAnv> PersonalAnvs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

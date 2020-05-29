@@ -15,22 +15,22 @@ namespace SakerhetTjanstGrupp4.Controllers
 {
     public class PersonalsController : ApiController
     {
-        private PersonalModel db = new PersonalModel();
+        private SakerhetsDB db = new SakerhetsDB();
 
         [HttpGet]
-        public IHttpActionResult Home()
-        {
+        //public IHttpActionResult Home()
+        //{
 
-            return Ok();
+        //    return Ok();
 
 
-        }
+        //}
 
         // GET: api/Personals
-        //public IQueryable<Personal> GetPersonal()
-        //{
-        //    return db.Personal;
-        //}
+        public IQueryable<PersonalAnv> GetPersonal()
+        {
+            return db.PersonalAnvs;
+        }
 
         // GET: api/Personals/5
         [ResponseType(typeof(PersonalAnv))]
@@ -149,7 +149,7 @@ namespace SakerhetTjanstGrupp4.Controllers
 
         [Route("Login")]
         [HttpPost]
-        public IHttpActionResult Login(PersonalAnv persAnv)
+        public IHttpActionResult LoginAdmin(PersonalAnv persAnv)
         {
             PersonalAnv PersInf = new PersonalAnv();
 
